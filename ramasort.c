@@ -14,7 +14,6 @@
 #include <string.h>
 
 struct entry {
-    int k, l;
     long value;
 };
 
@@ -58,11 +57,12 @@ int main(int argc, char **argv) {
 
     
     table_size = size_table(n);
+    printf("table_size: %zu\n", table_size);
     table = calloc(table_size, sizeof(struct entry));
 
     for (i = 0; cube(i) <= n; i++) {
         for (j = i + 1; cube(i) + cube(j) <= n; j++) {
-            table[m++] = (struct entry){i, j, cube(i) + cube(j)};
+            table[m++] = (struct entry){cube(i) + cube(j)};
         }
     }
     
