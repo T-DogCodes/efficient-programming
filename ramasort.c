@@ -55,6 +55,8 @@ int main(int argc, char **argv) {
     if (*endptr != '\0') {
         goto usage;
     }
+
+    
     table_size = size_table(n);
     table = calloc(table_size, sizeof(struct entry));
 
@@ -63,7 +65,8 @@ int main(int argc, char **argv) {
             table[m++] = (struct entry){i, j, cube(i) + cube(j)};
         }
     }
-    assert(m <= table_size);
+    
+    
     qsort(table, m, sizeof(struct entry), comp_entry);
     for (i = 1; i < m; i++) {
         if (table[i - 1].value == table[i].value) {
