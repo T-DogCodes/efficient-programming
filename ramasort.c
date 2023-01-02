@@ -38,30 +38,40 @@ size_t size_table(long n)
 }
 
 int main(int argc, char **argv) {
-    long n;
+    long maximum_number;
     char *endptr;
+
     long i, j;
-    long count = 0;
+    long m = 0;
+
+    // cubes array
     struct entry *table;
     size_t table_size;
-    long m = 0;
+
+    // result variables
+    long count = 0;
     long checksum = 0;
 
+    // USAGE & Argument Parsing
     if (argc != 2) {
         goto usage;
     }
-    n = strtol(argv[1], &endptr, 10);
+    maximum_number = strtol(argv[1], &endptr, 10);
     if (*endptr != '\0') {
         goto usage;
     }
-    table_size = size_table(n);
+
+    // Program Start
+
+    table_size = size_table(maximum_number);
     table = calloc(table_size, sizeof(struct entry));
 
-    for (i = 0; cube(i) <= n; i++) {
-        for (j = i + 1; cube(i) + cube(j) <= n; j++) {
+    for (i = 0; cube(i) <= maximum_number; i++) {
+        for (j = i + 1; cube(i) + cube(j) <= maximum_number; j++) {
             table[m++] = (struct entry){i, j, cube(i) + cube(j)};
         }
     }
+
     assert(m <= table_size);
     qsort(table, m, sizeof(struct entry), comp_entry);
     for (i = 1; i < m; i++) {
@@ -72,7 +82,9 @@ int main(int argc, char **argv) {
                 i++;
         }
     }
-    printf("%ld Ramanujan numbers up to %ld, checksum=%ld\noccupation=%ld, size=%ld\n", count, n, checksum, m, table_size);
+
+    // Printing
+    printf("%ld Ramanujan numbers up to %ld, checksum=%ld\noccupation=%ld, size=%ld\n", count, maximum_number, checksum, m, table_size);
     printf("Memory usage: >=%ld\n", table_size * sizeof(struct entry));
     return 0;
 
