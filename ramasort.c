@@ -14,7 +14,6 @@
 #include <string.h>
 
 struct entry {
-    int k, l;
     long value;
 };
 
@@ -45,8 +44,9 @@ int main(int argc, char **argv) {
     long m = 0;
 
     // cubes array
-    struct entry *table;
-    size_t table_size;
+    struct entry *slice_table;
+    size_t slice_table_size;
+    size_t table_size = 0;
 
     // result variables
     long count = 0;
@@ -63,26 +63,39 @@ int main(int argc, char **argv) {
 
     // Program Start
 
-    table_size = size_table(maximum_number);
-    table = calloc(table_size, sizeof(struct entry));
+    long slice_min, slice_max;
+    for (slice_min = 0; slice_min < maximum_number; slice_min = slice_max) {
+        slice_max = slice_min + 100000;
 
-    for (i = 0; cube(i) <= maximum_number; i++) {
-        for (j = i + 1; cube(i) + cube(j) <= maximum_number; j++) {
-            table[m++] = (struct entry){i, j, cube(i) + cube(j)};
+        m = 0;
+        slice_table_size = size_table(slice_max) - size_table(slice_min) + 100;
+        slice_table = calloc(slice_table_size, sizeof(struct entry));
+
+        if (slice_table_size > table_size) {
+            table_size = slice_table_size;
         }
-    }
 
-    assert(m <= table_size);
-    qsort(table, m, sizeof(struct entry), comp_entry);
-    for (i = 1; i < m; i++) {
-        if (table[i - 1].value == table[i].value) {
-            count++;
-            checksum += table[i].value;
-            while (i < m - 1 && table[i].value == table[i + 1].value)
-                i++;
+        for (i = 0; cube(i) <= slice_max; i++) {
+            for (j = i + 1; cube(i) + cube(j) <= slice_max; j++) {
+                if (cube(i) + cube(j) > slice_min) {
+                    slice_table[m++] = (struct entry){cube(i) + cube(j)};
+                }
+            }
         }
-    }
 
+        assert(m <= slice_table_size);
+        qsort(slice_table, m, sizeof(struct entry), comp_entry);
+        for (i = 1; i < m; i++) {
+            if (slice_table[i - 1].value == slice_table[i].value) {
+                count++;
+                checksum += slice_table[i].value;
+                while (i < m - 1 && slice_table[i].value == slice_table[i + 1].value) {
+                    i++;
+                }
+            }
+        }
+        free(slice_table);
+    }
     // Printing
     printf("%ld Ramanujan numbers up to %ld, checksum=%ld\noccupation=%ld, size=%ld\n", count, maximum_number, checksum, m, table_size);
     printf("Memory usage: >=%ld\n", table_size * sizeof(struct entry));
