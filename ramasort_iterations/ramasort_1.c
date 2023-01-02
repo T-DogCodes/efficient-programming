@@ -14,7 +14,6 @@
 #include <string.h>
 
 struct entry {
-    int k, l;
     long value;
 };
 

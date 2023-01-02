@@ -25,7 +25,7 @@ Memory usage: >=3713272656
        0.778852000 seconds sys
 ```
 
-## 1. Iteration
+## 1. Iteration: Reduce Struct Size
 
 Entfernen von unnötigen Einträgen im Struct (integer-Werte)
 
@@ -55,3 +55,13 @@ Memory usage: >=1856636328
       12.254395000 seconds user
        0.396027000 seconds sys
 ```
+
+## 2. Iteration - Slicing (basic)
+
+## 3. Optimieren der lower-bound des "j"
+
+## 4. Slicing Improvement
+
+## 5. Austesten des Slicing Memory Limits
+
+## 6. Cubs, ...
